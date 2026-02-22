@@ -263,6 +263,17 @@
             transform: translateY(-2px);
         }
 
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent-tertiary), #ef4444);
+            color: white;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+        }
+
         /* Terminal Code Block */
         .terminal {
             background: var(--bg-card);
@@ -667,6 +678,25 @@
 
             .nav-links {
                 display: none;
+                position: fixed;
+                top: 70px;
+                right: 0;
+                left: 0;
+                background: rgba(10, 14, 39, 0.98);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                animation: slideDown 0.3s ease;
+            }
+
+            .nav-links.mobile-active {
+                display: flex;
+            }
+
+            .nav-links a::after {
+                display: none;
             }
 
             h1 {
@@ -704,6 +734,51 @@
         /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Enhanced Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 217, 255, 0.6); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .project-card {
+            animation: scaleIn 0.5s ease backwards;
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .project-card:nth-child(4) { animation-delay: 0.4s; }
+        .project-card:nth-child(5) { animation-delay: 0.5s; }
+        .project-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .skill-category {
+            animation: scaleIn 0.5s ease backwards;
+        }
+
+        .skill-category:nth-child(1) { animation-delay: 0.1s; }
+        .skill-category:nth-child(2) { animation-delay: 0.2s; }
+        .skill-category:nth-child(3) { animation-delay: 0.3s; }
+        .skill-category:nth-child(4) { animation-delay: 0.4s; }
+        .skill-category:nth-child(5) { animation-delay: 0.5s; }
+
+        .terminal {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .btn-primary {
+            animation: glow 2s ease-in-out infinite;
         }
 
         /* Selection */
@@ -752,6 +827,9 @@
                     <a href="#projects" class="btn btn-secondary">
                         View Projects
                     </a>
+                    <button onclick="downloadResume()" class="btn btn-download">
+                        📄 Download Resume
+                    </button>
                 </div>
             </div>
             <div class="terminal">
@@ -821,7 +899,6 @@
     <!-- About Section -->
     <section id="about">
         <div class="section-header">
-            <span class="section-tag">// About Me</span>
             <h2 class="section-title">Get to <span class="gradient-text">know me</span></h2>
         </div>
         <div class="about-grid">
@@ -850,7 +927,7 @@
                         <div class="stat-label">Years Experience</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">15+</div>
+                        <div class="stat-number">30+</div>
                         <div class="stat-label">Projects Delivered</div>
                     </div>
                     <div class="stat-item">
@@ -865,7 +942,6 @@
     <!-- Skills Section -->
     <section id="skills">
         <div class="section-header">
-            <span class="section-tag">// Technical Expertise</span>
             <h2 class="section-title"><span class="gradient-text">Skills</span> & Technologies</h2>
             <p class="section-description">
                 A comprehensive toolkit built through years of hands-on experience in full-stack development
@@ -931,13 +1007,26 @@
                     <span class="skill-tag">Shopify</span>
                 </div>
             </div>
+            <div class="skill-category">
+                <h3>
+                    <span class="skill-icon">🧪</span>
+                    Testing & Automation
+                </h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Robot Framework</span>
+                    <span class="skill-tag">Java (Spring Boot)</span>
+                    <span class="skill-tag">Gauge PXT</span>
+                    <span class="skill-tag">UI Testing</span>
+                    <span class="skill-tag">Test Automation</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Projects Section -->
     <section id="projects">
         <div class="section-header">
-            <span class="section-tag">// Portfolio</span>
             <h2 class="section-title">Featured <span class="gradient-text">Projects</span></h2>
             <p class="section-description">
                 Building impactful solutions with modern technologies and best practices
@@ -1061,7 +1150,6 @@
     <!-- Contact Section -->
     <section id="contact">
         <div class="section-header">
-            <span class="section-tag">// Get In Touch</span>
             <h2 class="section-title">Let's Work <span class="gradient-text">Together</span></h2>
             <p class="section-description">
                 Have a project in mind or want to collaborate? I'd love to hear from you!
@@ -1117,6 +1205,23 @@
     </footer>
 
     <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('mobile-active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
         // Smooth scroll for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1130,6 +1235,23 @@
                 }
             });
         });
+
+        // Resume download function
+        function downloadResume() {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            // You can replace this with your actual resume URL or path
+            // For now, it will download the PDF from your uploaded resume
+            link.href = 'https://drive.google.com/file/d/1WC-bWPNeMgbCteJGTKqNTMycjPwL4X4p/view'; // Update this path to your resume location
+            link.download = 'Vijay_Lunagariya_Resume.pdf';
+            link.target = '_blank'; 
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // If you want to use a Google Drive or Dropbox link instead:
+            // window.open('YOUR_GOOGLE_DRIVE_LINK', '_blank');
+        }
 
         // Add scroll animation for sections
         const observerOptions = {
@@ -1151,6 +1273,34 @@
             section.style.transform = 'translateY(20px)';
             section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(section);
+        });
+
+        // Add parallax effect to background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bgAnimation = document.querySelector('.bg-animation');
+            if (bgAnimation) {
+                bgAnimation.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add typing effect to hero subtitle
+        const subtitle = document.querySelector('.hero-subtitle');
+        const text = subtitle.textContent;
+        subtitle.textContent = '';
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                subtitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+
+        // Start typing effect after page loads
+        window.addEventListener('load', () => {
+            setTimeout(typeWriter, 500);
         });
     </script>
 </body>
